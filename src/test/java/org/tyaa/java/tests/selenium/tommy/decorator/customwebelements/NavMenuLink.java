@@ -21,10 +21,14 @@ public class NavMenuLink extends BaseElement {
     /* Выполнить клик по текущему элементу,
      * затем ожидать максимум до timeOutInSeconds секунд,
      * пока не завершится загрузка нового документа (веб-страницы) */
-    public void safeClickThenWaitForDocument(long timeOutInSeconds) {
-        performAndWaitForUpdate(
-            driver,
-            () -> this.safeClick(timeOutInSeconds),
+    public void moveToThenSafeClickThenWaitForDocument(long timeOutInSeconds) {
+        moveToElementAndSafeAction(
+            element,
+            () -> performAndWaitForUpdate(
+                driver,
+                () -> this.safeClick(timeOutInSeconds),
+                timeOutInSeconds
+            ),
             timeOutInSeconds
         );
     }

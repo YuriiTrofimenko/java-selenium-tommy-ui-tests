@@ -84,9 +84,23 @@ public class BaseElement implements WebElement {
         );
     }
 
+    public void moveToElementAndSafeAction(
+        WebElement target,
+        Runnable actionToPerform,
+        long timeOutInSeconds
+    ) {
+        Actions actions = new Actions(driver);
+        actions.moveToElement(target).perform();
+        safeAction(actionToPerform, timeOutInSeconds);
+    }
+
+    public void moveToAndSafeClick(long timeOutInSeconds) {
+        moveToElementAndSafeAction(element, () -> element.click(), timeOutInSeconds);
+    }
+
     /* Выполнить действие actionToPerform с элементом,
-    * затем ожидать максимум до timeOutInSeconds секунд,
-    * пока не исчезнет элемент с селектором locatorToWaitForDisappear */
+     * затем ожидать максимум до timeOutInSeconds секунд,
+     * пока не исчезнет элемент с селектором locatorToWaitForDisappear */
     public static void performAndWaitForDisappear(
         WebDriver driver,
         Runnable actionToPerform,
@@ -105,8 +119,8 @@ public class BaseElement implements WebElement {
     }
 
     /* Попытаться выполнить действие с элементом,
-    * и если элемент был перекрыт другим элементом
-    * или обновлялся - повторять попытку снова, пока не получится выполнить действие */
+     * и если элемент был перекрыт другим элементом
+     * или обновлялся - повторять попытку снова, пока не получится выполнить действие */
     public void safeAction(Runnable actionToPerform, long timeOutInSeconds) {
         try {
             actionToPerform.run();
